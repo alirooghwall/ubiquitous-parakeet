@@ -7,13 +7,16 @@ const User = require('../models/User');
 // Messenger home
 router.get('/', ensureAuth, async (req, res) => {
   try {
+    const mongoose = require('mongoose');
+    const userId = new mongoose.Types.ObjectId(req.session.userId);
+    
     // Get conversations (unique users)
     const conversations = await Message.aggregate([
       {
         $match: {
           $or: [
-            { sender: req.user._id },
-            { receiver: req.user._id }
+            { sender: userId },
+            { receiver: userId }
           ]
         }
       },
@@ -24,7 +27,7 @@ router.get('/', ensureAuth, async (req, res) => {
         $group: {
           _id: {
             $cond: [
-              { $eq: ['$sender', req.user._id] },
+              { $eq: ['$sender', userId] },
               '$receiver',
               '$sender'
             ]

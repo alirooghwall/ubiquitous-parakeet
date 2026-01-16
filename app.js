@@ -40,8 +40,11 @@ app.use(session({
 // Attach user to all requests
 app.use(attachUser);
 
-// Make moment available in views
+// Make moment and helpers available in views
+const helpers = require('./utils/helpers');
 app.locals.moment = require('moment');
+app.locals.helpers = helpers;
+app.locals.DEFAULT_AVATAR_PATH = helpers.DEFAULT_AVATAR_PATH;
 
 // Routes
 app.get('/', (req, res) => {
