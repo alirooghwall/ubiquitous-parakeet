@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> - MLMVER2</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <%- include('../partials/header') %>
+  
+  <div class="container">
+    <%- include('../partials/sidebar') %>
+    
+    <main class="main-content">
+      <h1><%= title %></h1>
+      
+      <div class="notifications-actions">
+        <button onclick="markAllRead()" class="btn btn-secondary">Mark All as Read</button>
+      </div>
+      
+      <div class="notifications-list">
+        <% notifications.forEach(notification => { %>
+          <div class="notification-item <%= notification.isRead ? 'read' : 'unread' %>" onclick="markAsRead('<%= notification._id %>')">
+            <div class="notification-icon">
+              <% if (notification.type === 'sale') { %>
+                <i class="fas fa-dollar-sign"></i>
+              <% } else if (notification.type === 'recruit') { %>
+                <i class="fas fa-user-plus"></i>
+              <% } else if (notification.type === 'message') { %>
+                <i class="fas fa-envelope"></i>
+              <% } else if (notification.type === 'announcement') { %>
+                <i class="fas fa-bullhorn"></i>
+              <% } else if (notification.type === 'approval') { %>
+                <i class="fas fa-check-circle"></i>
+              <% } else { %>
+                <i class="fas fa-info-circle"></i>
+              <% } %>
+            </div>
+            
+            <div class="notification-content">
+              <h3><%= notification.title %></h3>
+              <p><%= notification.message %></p>
+              <small><%= moment(notification.createdAt).fromNow() %></small>
+            </div>
+            
+            <% if (!notification.isRead) { %>
+              <div class="notification-status">
+                <span class="unread-dot"></span>
+              </div>
+            <% } %>
+          </div>
+        <% }) %>
+      </div>
+      
+      <% if (notifications.length === 0) { %>
+        <p class="no-results">No notifications yet.</p>
+      <% } %>
+    </main>
+  </div>
+  
+  <script src="/js/main.js"></script>
+  <script>
+    function markAsRead(id) {
+      fetch(`/notifications/${id}/read`, { method: 'POST' })
+        .then(() => location.reload());
+    }
+    
+    function markAllRead() {
+      fetch('/notifications/read-all', { method: 'POST' })
+        .then(() => location.reload());
+    }
+  </script>
+  
+  <style>
+    .notifications-actions {
+      margin-bottom: 1.5rem;
+    }
+    
+    .notification-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .notification-item:hover {
+      background-color: #f8f9fa;
+    }
+    
+    .notification-item.unread {
+      background-color: #e3f2fd;
+      border-color: #3498db;
+    }
+    
+    .notification-icon {
+      font-size: 1.5rem;
+      color: #3498db;
+      width: 40px;
+      text-align: center;
+    }
+    
+    .notification-content {
+      flex: 1;
+    }
+    
+    .notification-content h3 {
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+    }
+    
+    .notification-content p {
+      margin-bottom: 0.5rem;
+      color: #666;
+    }
+    
+    .notification-content small {
+      color: #999;
+      font-size: 0.85rem;
+    }
+    
+    .notification-status {
+      width: 20px;
+    }
+    
+    .unread-dot {
+      display: block;
+      width: 10px;
+      height: 10px;
+      background-color: #3498db;
+      border-radius: 50%;
+    }
+  </style>
+</body>
+</html>

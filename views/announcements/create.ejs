@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> - MLMVER2</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <%- include('../partials/header') %>
+  
+  <div class="container">
+    <%- include('../partials/sidebar') %>
+    
+    <main class="main-content">
+      <h1><%= title %></h1>
+      
+      <form action="/announcements/create" method="POST" class="form">
+        <% if (typeof error !== 'undefined' && error) { %>
+          <div class="alert alert-error"><%= error %></div>
+        <% } %>
+        
+        <div class="form-group">
+          <label for="title">Title</label>
+          <input type="text" id="title" name="title" required class="form-control">
+        </div>
+        
+        <div class="form-group">
+          <label for="content">Content</label>
+          <textarea id="content" name="content" required class="form-control" rows="8"></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="category">Category</label>
+          <select id="category" name="category" required class="form-control">
+            <option value="general">General</option>
+            <option value="urgent">Urgent</option>
+            <option value="event">Event</option>
+            <option value="training">Training</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>
+            <input type="checkbox" name="isPinned"> Pin this announcement
+          </label>
+        </div>
+        
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary">Create Announcement</button>
+          <a href="/announcements" class="btn btn-secondary">Cancel</a>
+        </div>
+      </form>
+    </main>
+  </div>
+  
+  <script src="/js/main.js"></script>
+</body>
+</html>

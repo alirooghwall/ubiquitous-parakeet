@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> - MLMVER2</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <%- include('../partials/header') %>
+  
+  <div class="container">
+    <%- include('../partials/sidebar') %>
+    
+    <main class="main-content">
+      <h1>Profile: <%= participant.username %></h1>
+      
+      <div class="profile-container">
+        <div class="profile-header">
+          <img src="<%= participant.profile.avatar || '/images/default-avatar.png' %>" alt="<%= participant.username %>" class="profile-avatar">
+          <div class="profile-info">
+            <h2><%= participant.profile.firstName %> <%= participant.profile.lastName %></h2>
+            <p><%= participant.email %></p>
+            <p><%= participant.profile.phone || 'No phone' %></p>
+            <p>
+              <span class="badge badge-<%= participant.status %>"><%= participant.status %></span>
+              <span class="badge"><%= participant.role %></span>
+            </p>
+          </div>
+        </div>
+        
+        <div class="profile-stats">
+          <div class="stat-item">
+            <h3>Total Sales</h3>
+            <p>$<%= participant.stats.totalSales.toFixed(2) %></p>
+          </div>
+          <div class="stat-item">
+            <h3>Total Recruits</h3>
+            <p><%= participant.stats.totalRecruits %></p>
+          </div>
+          <div class="stat-item">
+            <h3>Points</h3>
+            <p><%= participant.stats.points %></p>
+          </div>
+          <div class="stat-item">
+            <h3>Level</h3>
+            <p><%= participant.genealogy.level %></p>
+          </div>
+        </div>
+        
+        <% if (participant.sponsor) { %>
+          <div class="profile-section">
+            <h3>Sponsor</h3>
+            <p><a href="/participants/<%= participant.sponsor._id %>"><%= participant.sponsor.username %></a></p>
+          </div>
+        <% } %>
+        
+        <% if (participant.genealogy.upline) { %>
+          <div class="profile-section">
+            <h3>Upline</h3>
+            <p><a href="/participants/<%= participant.genealogy.upline._id %>"><%= participant.genealogy.upline.username %></a></p>
+          </div>
+        <% } %>
+        
+        <div class="profile-section">
+          <h3>Recruits (<%= recruits.length %>)</h3>
+          <% if (recruits.length > 0) { %>
+            <div class="recruits-list">
+              <% recruits.forEach(recruit => { %>
+                <div class="recruit-item">
+                  <a href="/participants/<%= recruit._id %>"><%= recruit.username %></a>
+                  <span class="badge badge-<%= recruit.status %>"><%= recruit.status %></span>
+                </div>
+              <% }) %>
+            </div>
+          <% } else { %>
+            <p>No recruits yet.</p>
+          <% } %>
+        </div>
+        
+        <div class="profile-section">
+          <h3>Recent Sales</h3>
+          <% if (sales.length > 0) { %>
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Product</th>
+                  <th>Amount</th>
+                  <th>Points</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% sales.forEach(sale => { %>
+                  <tr>
+                    <td><%= moment(sale.createdAt).format('MMM D, YYYY') %></td>
+                    <td><%= sale.product.name %></td>
+                    <td>$<%= sale.totalAmount.toFixed(2) %></td>
+                    <td><%= sale.pointsEarned %></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          <% } else { %>
+            <p>No sales recorded yet.</p>
+          <% } %>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <script src="/js/main.js"></script>
+  
+  <style>
+    .profile-container {
+      max-width: 900px;
+    }
+    
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+      padding: 2rem;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+    
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    
+    .profile-info h2 {
+      margin-bottom: 0.5rem;
+    }
+    
+    .profile-info p {
+      margin-bottom: 0.5rem;
+      color: #666;
+    }
+    
+    .profile-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .stat-item {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    
+    .stat-item h3 {
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 0.5rem;
+    }
+    
+    .stat-item p {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #3498db;
+    }
+    
+    .profile-section {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .profile-section h3 {
+      margin-bottom: 1rem;
+    }
+    
+    .recruits-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .recruit-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem;
+      background: #f8f9fa;
+      border-radius: 4px;
+    }
+    
+    .recruit-item a {
+      color: #3498db;
+      text-decoration: none;
+    }
+  </style>
+</body>
+</html>

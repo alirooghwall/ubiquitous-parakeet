@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> - MLMVER2</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <%- include('../partials/header') %>
+  
+  <div class="container">
+    <%- include('../partials/sidebar') %>
+    
+    <main class="main-content">
+      <div class="announcement-detail">
+        <% if (announcement.isPinned) { %>
+          <div class="pinned-badge"><i class="fas fa-thumbtack"></i> Pinned</div>
+        <% } %>
+        
+        <span class="badge badge-<%= announcement.category %>"><%= announcement.category %></span>
+        
+        <h1><%= announcement.title %></h1>
+        
+        <div class="announcement-meta">
+          <span><i class="fas fa-user"></i> <%= announcement.author.username %></span>
+          <span><i class="fas fa-clock"></i> <%= moment(announcement.createdAt).format('MMMM D, YYYY h:mm A') %></span>
+        </div>
+        
+        <div class="announcement-content">
+          <%= announcement.content %>
+        </div>
+        
+        <div class="announcement-actions">
+          <a href="/announcements" class="btn btn-secondary">Back to Announcements</a>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <script src="/js/main.js"></script>
+  
+  <style>
+    .announcement-detail {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .announcement-detail h1 {
+      margin: 1rem 0;
+    }
+    
+    .announcement-meta {
+      display: flex;
+      gap: 2rem;
+      margin: 1rem 0;
+      padding: 1rem 0;
+      border-top: 1px solid #eee;
+      border-bottom: 1px solid #eee;
+      color: #666;
+    }
+    
+    .announcement-meta i {
+      margin-right: 0.5rem;
+    }
+    
+    .announcement-content {
+      margin: 2rem 0;
+      line-height: 1.8;
+      white-space: pre-line;
+    }
+    
+    .announcement-actions {
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid #eee;
+    }
+  </style>
+</body>
+</html>

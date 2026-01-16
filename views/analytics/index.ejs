@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> - MLMVER2</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <%- include('../partials/header') %>
+  
+  <div class="container">
+    <%- include('../partials/sidebar') %>
+    
+    <main class="main-content">
+      <h1><%= title %></h1>
+      
+      <div class="leaderboard-section">
+        <h2>Top Sales Performers</h2>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Username</th>
+              <th>Name</th>
+              <th>Total Sales</th>
+              <th>Points</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% topSales.forEach((user, index) => { %>
+              <tr>
+                <td><%= index + 1 %></td>
+                <td><%= user.username %></td>
+                <td><%= user.profile.firstName %> <%= user.profile.lastName %></td>
+                <td>$<%= user.stats.totalSales.toFixed(2) %></td>
+                <td><%= user.stats.points %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="leaderboard-section">
+        <h2>Top Recruiters</h2>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Username</th>
+              <th>Name</th>
+              <th>Total Recruits</th>
+              <th>Points</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% topRecruiters.forEach((user, index) => { %>
+              <tr>
+                <td><%= index + 1 %></td>
+                <td><%= user.username %></td>
+                <td><%= user.profile.firstName %> <%= user.profile.lastName %></td>
+                <td><%= user.stats.totalRecruits %></td>
+                <td><%= user.stats.points %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="leaderboard-section">
+        <h2>Top Points</h2>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Username</th>
+              <th>Name</th>
+              <th>Points</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% topPoints.forEach((user, index) => { %>
+              <tr>
+                <td><%= index + 1 %></td>
+                <td><%= user.username %></td>
+                <td><%= user.profile.firstName %> <%= user.profile.lastName %></td>
+                <td><%= user.stats.points %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="stats-summary">
+        <h2>Last 30 Days Summary</h2>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <h3>Total Sales</h3>
+            <p class="stat-value">$<%= recentSales.totalSales.toFixed(2) %></p>
+          </div>
+          <div class="stat-card">
+            <h3>Total Transactions</h3>
+            <p class="stat-value"><%= recentSales.totalTransactions %></p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <script src="/js/main.js"></script>
+  
+  <style>
+    .leaderboard-section {
+      margin-bottom: 3rem;
+    }
+    
+    .leaderboard-section h2 {
+      margin-bottom: 1rem;
+    }
+    
+    .stats-summary {
+      margin-top: 2rem;
+    }
+  </style>
+</body>
+</html>

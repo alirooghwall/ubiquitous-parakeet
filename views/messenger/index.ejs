@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> - MLMVER2</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <%- include('../partials/header') %>
+  
+  <div class="container">
+    <%- include('../partials/sidebar') %>
+    
+    <main class="main-content">
+      <h1><%= title %></h1>
+      
+      <div class="messenger-container">
+        <div class="conversations-list">
+          <h2>Conversations</h2>
+          <% if (conversations.length > 0) { %>
+            <% conversations.forEach(conv => { %>
+              <a href="/messenger/<%= conv.user._id %>" class="conversation-item">
+                <img src="<%= conv.user.profile.avatar || '/images/default-avatar.png' %>" alt="<%= conv.user.username %>" class="avatar">
+                <div class="conversation-info">
+                  <strong><%= conv.user.username %></strong>
+                  <p><%= conv.lastMessage.content.substring(0, 50) %>...</p>
+                  <small><%= moment(conv.lastMessage.createdAt).fromNow() %></small>
+                </div>
+              </a>
+            <% }) %>
+          <% } else { %>
+            <p class="no-results">No conversations yet.</p>
+          <% } %>
+        </div>
+        
+        <div class="messenger-info">
+          <p>Select a conversation to start messaging</p>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <script src="/js/main.js"></script>
+  
+  <style>
+    .messenger-container {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 2rem;
+      min-height: 500px;
+    }
+    
+    .conversations-list {
+      border-right: 1px solid #ddd;
+      padding-right: 2rem;
+    }
+    
+    .conversations-list h2 {
+      margin-bottom: 1rem;
+    }
+    
+    .conversation-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #333;
+      margin-bottom: 0.5rem;
+      transition: background-color 0.3s;
+    }
+    
+    .conversation-item:hover {
+      background-color: #f8f9fa;
+    }
+    
+    .conversation-info {
+      flex: 1;
+    }
+    
+    .conversation-info strong {
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+    
+    .conversation-info p {
+      color: #666;
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+    }
+    
+    .conversation-info small {
+      color: #999;
+      font-size: 0.8rem;
+    }
+    
+    .messenger-info {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #999;
+    }
+  </style>
+</body>
+</html>

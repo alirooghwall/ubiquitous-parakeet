@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> - MLMVER2</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <%- include('../partials/header') %>
+  
+  <div class="container">
+    <%- include('../partials/sidebar') %>
+    
+    <main class="main-content">
+      <div class="page-header">
+        <h1><%= title %></h1>
+        <a href="/sales/record" class="btn btn-primary">Record Sale</a>
+      </div>
+      
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>User</th>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Amount</th>
+            <th>Points</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% sales.forEach(sale => { %>
+            <tr>
+              <td><%= moment(sale.createdAt).format('MMM D, YYYY') %></td>
+              <td><%= sale.user.username %></td>
+              <td><%= sale.product.name %></td>
+              <td><%= sale.quantity %></td>
+              <td>$<%= sale.totalAmount.toFixed(2) %></td>
+              <td><%= sale.pointsEarned %></td>
+              <td><span class="badge badge-<%= sale.status %>"><%= sale.status %></span></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+      
+      <% if (sales.length === 0) { %>
+        <p class="no-results">No sales recorded yet.</p>
+      <% } %>
+    </main>
+  </div>
+  
+  <script src="/js/main.js"></script>
+</body>
+</html>
