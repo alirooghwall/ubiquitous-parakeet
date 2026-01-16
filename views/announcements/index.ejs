@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> - MLMVER2</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <%- include('../partials/header') %>
+  
+  <div class="container">
+    <%- include('../partials/sidebar') %>
+    
+    <main class="main-content">
+      <div class="page-header">
+        <h1><%= title %></h1>
+        <% if (user.role === 'admin' || user.role === 'manager') { %>
+          <a href="/announcements/create" class="btn btn-primary">Create Announcement</a>
+        <% } %>
+      </div>
+      
+      <div class="announcements-list">
+        <% announcements.forEach(announcement => { %>
+          <div class="announcement-card">
+            <% if (announcement.isPinned) { %>
+              <div class="pinned-badge"><i class="fas fa-thumbtack"></i> Pinned</div>
+            <% } %>
+            
+            <div class="announcement-category">
+              <span class="badge badge-<%= announcement.category %>"><%= announcement.category %></span>
+            </div>
+            
+            <h2><a href="/announcements/<%= announcement._id %>"><%= announcement.title %></a></h2>
+            <p><%= announcement.content.substring(0, 200) %>...</p>
+            
+            <div class="announcement-meta">
+              <span><i class="fas fa-user"></i> <%= announcement.author.username %></span>
+              <span><i class="fas fa-clock"></i> <%= moment(announcement.createdAt).fromNow() %></span>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+      
+      <% if (announcements.length === 0) { %>
+        <p class="no-results">No announcements yet.</p>
+      <% } %>
+    </main>
+  </div>
+  
+  <script src="/js/main.js"></script>
+  
+  <style>
+    .announcement-card {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+    
+    .pinned-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      color: #f39c12;
+      font-weight: bold;
+    }
+    
+    .announcement-category {
+      margin-bottom: 1rem;
+    }
+    
+    .announcement-card h2 {
+      margin-bottom: 1rem;
+    }
+    
+    .announcement-card h2 a {
+      color: #333;
+      text-decoration: none;
+    }
+    
+    .announcement-card h2 a:hover {
+      color: #3498db;
+    }
+    
+    .announcement-meta {
+      display: flex;
+      gap: 2rem;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #eee;
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    .announcement-meta i {
+      margin-right: 0.5rem;
+    }
+  </style>
+</body>
+</html>

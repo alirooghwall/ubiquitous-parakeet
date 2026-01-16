@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> - MLMVER2</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <%- include('../partials/header') %>
+  
+  <div class="container">
+    <%- include('../partials/sidebar') %>
+    
+    <main class="main-content">
+      <h1>Dashboard</h1>
+      
+      <div class="stats-grid">
+        <div class="stat-card">
+          <i class="fas fa-dollar-sign"></i>
+          <h3>Total Sales</h3>
+          <p class="stat-value"><%= stats.totalSales %></p>
+        </div>
+        
+        <div class="stat-card">
+          <i class="fas fa-users"></i>
+          <h3>Recruits</h3>
+          <p class="stat-value"><%= stats.totalRecruits %></p>
+        </div>
+        
+        <div class="stat-card">
+          <i class="fas fa-star"></i>
+          <h3>Points</h3>
+          <p class="stat-value"><%= stats.points %></p>
+        </div>
+        
+        <% if (stats.pendingApprovals > 0) { %>
+        <div class="stat-card">
+          <i class="fas fa-user-clock"></i>
+          <h3>Pending Approvals</h3>
+          <p class="stat-value"><%= stats.pendingApprovals %></p>
+        </div>
+        <% } %>
+      </div>
+      
+      <div class="dashboard-grid">
+        <div class="dashboard-section">
+          <h2>Recent Announcements</h2>
+          <div class="announcements-list">
+            <% if (announcements.length > 0) { %>
+              <% announcements.forEach(announcement => { %>
+                <div class="announcement-item">
+                  <% if (announcement.isPinned) { %>
+                    <i class="fas fa-thumbtack"></i>
+                  <% } %>
+                  <h4><a href="/announcements/<%= announcement._id %>"><%= announcement.title %></a></h4>
+                  <p><%= announcement.content.substring(0, 100) %>...</p>
+                  <small>By <%= announcement.author.username %> - <%= moment(announcement.createdAt).fromNow() %></small>
+                </div>
+              <% }) %>
+            <% } else { %>
+              <p>No announcements yet.</p>
+            <% } %>
+          </div>
+          <a href="/announcements" class="btn btn-link">View all announcements</a>
+        </div>
+        
+        <div class="dashboard-section">
+          <h2>Recent Notifications</h2>
+          <div class="notifications-list">
+            <% if (notifications.length > 0) { %>
+              <% notifications.forEach(notification => { %>
+                <div class="notification-item <%= notification.isRead ? 'read' : 'unread' %>">
+                  <h4><%= notification.title %></h4>
+                  <p><%= notification.message %></p>
+                  <small><%= moment(notification.createdAt).fromNow() %></small>
+                </div>
+              <% }) %>
+            <% } else { %>
+              <p>No notifications yet.</p>
+            <% } %>
+          </div>
+          <a href="/notifications" class="btn btn-link">View all notifications</a>
+        </div>
+      </div>
+      
+      <div class="quick-actions">
+        <h2>Quick Actions</h2>
+        <div class="action-buttons">
+          <a href="/attendance" class="btn btn-primary">Check In</a>
+          <a href="/sales/record" class="btn btn-success">Record Sale</a>
+          <a href="/feed" class="btn btn-info">View Feed</a>
+          <a href="/messenger" class="btn btn-warning">Messages</a>
+        </div>
+      </div>
+    </main>
+  </div>
+  
+  <script src="/js/main.js"></script>
+</body>
+</html>

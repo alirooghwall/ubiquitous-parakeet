@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> - MLMVER2</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <%- include('../partials/header') %>
+  
+  <div class="container">
+    <%- include('../partials/sidebar') %>
+    
+    <main class="main-content">
+      <h1><%= title %></h1>
+      
+      <div class="search-container">
+        <form action="/search" method="GET" class="search-form">
+          <input type="text" name="q" placeholder="Search..." class="form-control" value="<%= query %>">
+          <select name="type" class="form-control">
+            <option value="all" <%= type === 'all' ? 'selected' : '' %>>All</option>
+            <option value="users" <%= type === 'users' ? 'selected' : '' %>>Users</option>
+            <option value="products" <%= type === 'products' ? 'selected' : '' %>>Products</option>
+            <option value="announcements" <%= type === 'announcements' ? 'selected' : '' %>>Announcements</option>
+            <option value="posts" <%= type === 'posts' ? 'selected' : '' %>>Posts</option>
+          </select>
+          <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+      </div>
+      
+      <% if (results) { %>
+        <div class="search-results">
+          <% if (results.users.length > 0) { %>
+            <div class="result-section">
+              <h2>Users</h2>
+              <% results.users.forEach(user => { %>
+                <div class="result-item">
+                  <h3><a href="/participants/<%= user._id %>"><%= user.username %></a></h3>
+                  <p><%= user.profile.firstName %> <%= user.profile.lastName %></p>
+                  <p><%= user.email %></p>
+                </div>
+              <% }) %>
+            </div>
+          <% } %>
+          
+          <% if (results.products.length > 0) { %>
+            <div class="result-section">
+              <h2>Products</h2>
+              <% results.products.forEach(product => { %>
+                <div class="result-item">
+                  <h3><a href="/products/<%= product._id %>"><%= product.name %></a></h3>
+                  <p>$<%= product.price %> - <%= product.points %> points</p>
+                </div>
+              <% }) %>
+            </div>
+          <% } %>
+          
+          <% if (results.announcements.length > 0) { %>
+            <div class="result-section">
+              <h2>Announcements</h2>
+              <% results.announcements.forEach(announcement => { %>
+                <div class="result-item">
+                  <h3><a href="/announcements/<%= announcement._id %>"><%= announcement.title %></a></h3>
+                  <p><%= announcement.content.substring(0, 150) %>...</p>
+                  <small>By <%= announcement.author.username %></small>
+                </div>
+              <% }) %>
+            </div>
+          <% } %>
+          
+          <% if (results.posts.length > 0) { %>
+            <div class="result-section">
+              <h2>Feed Posts</h2>
+              <% results.posts.forEach(post => { %>
+                <div class="result-item">
+                  <p><%= post.content %></p>
+                  <small>By <%= post.author.username %> - <%= moment(post.createdAt).fromNow() %></small>
+                </div>
+              <% }) %>
+            </div>
+          <% } %>
+          
+          <% if (results.users.length === 0 && results.products.length === 0 && 
+                 results.announcements.length === 0 && results.posts.length === 0) { %>
+            <p class="no-results">No results found.</p>
+          <% } %>
+        </div>
+      <% } %>
+    </main>
+  </div>
+  
+  <script src="/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<% if (typeof user !== 'undefined' && user) { %>
+<header class="header">
+  <div class="header-content">
+    <div class="logo">
+      <h1>MLMVER2</h1>
+    </div>
+    
+    <div class="header-actions">
+      <div class="search-box">
+        <form action="/search" method="GET">
+          <input type="text" name="q" placeholder="Search..." class="search-input">
+          <button type="submit" class="search-btn"><i class="fas fa-search"></i></button>
+        </form>
+      </div>
+      
+      <a href="/notifications" class="notification-icon">
+        <i class="fas fa-bell"></i>
+        <span class="badge" id="notification-count">0</span>
+      </a>
+      
+      <div class="user-menu">
+        <img src="<%= user.profile.avatar || '/images/default-avatar.png' %>" alt="<%= user.username %>" class="avatar">
+        <span><%= user.username %></span>
+        <div class="dropdown">
+          <a href="/participants/<%= user._id %>">Profile</a>
+          <a href="/auth/logout">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<% } %>
