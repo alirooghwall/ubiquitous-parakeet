@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> - MLMVER2</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <%- include('../partials/header') %>
+  
+  <div class="container">
+    <%- include('../partials/sidebar') %>
+    
+    <main class="main-content">
+      <h1><%= title %></h1>
+      
+      <form id="saleForm" class="form">
+        <% if (typeof error !== 'undefined' && error) { %>
+          <div class="alert alert-error"><%= error %></div>
+        <% } %>
+        
+        <div class="form-group">
+          <label for="product">Select Product</label>
+          <select id="product" name="product" required class="form-control">
+            <option value="">-- Select a product --</option>
+            <% products.forEach(product => { %>
+              <option value="<%= product._id %>" 
+                      data-price="<%= product.price %>" 
+                      data-points="<%= product.points %>"
+                      data-stock="<%= product.stock %>">
+                <%= product.name %> - $<%= product.price %> (<%= product.stock %> in stock)
+              </option>
+            <% }) %>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="quantity">Quantity</label>
+          <input type="number" id="quantity" name="quantity" value="1" min="1" required class="form-control">
+        </div>
+        
+        <div class="sale-preview">
+          <h3>Sale Preview</h3>
+          <p><strong>Total Amount:</strong> $<span id="totalAmount">0.00</span></p>
+          <p><strong>Points to Earn:</strong> <span id="totalPoints">0</span></p>
+        </div>
+        
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary">Record Sale</button>
+          <a href="/sales" class="btn btn-secondary">Cancel</a>
+        </div>
+      </form>
+    </main>
+  </div>
+  
+  <script src="/js/main.js"></script>
+  <script>
+    const productSelect = document.getElementById('product');
+    const quantityInput = document.getElementById('quantity');
+    const totalAmountSpan = document.getElementById('totalAmount');
+    const totalPointsSpan = document.getElementById('totalPoints');
+    const saleForm = document.getElementById('saleForm');
+    
+    function updatePreview() {
+      const selectedOption = productSelect.options[productSelect.selectedIndex];
+      if (selectedOption.value) {
+        const price = parseFloat(selectedOption.dataset.price);
+        const points = parseFloat(selectedOption.dataset.points);
+        const quantity = parseInt(quantityInput.value) || 0;
+        
+        totalAmountSpan.textContent = (price * quantity).toFixed(2);
+        totalPointsSpan.textContent = points * quantity;
+      } else {
+        totalAmountSpan.textContent = '0.00';
+        totalPointsSpan.textContent = '0';
+      }
+    }
+    
+    productSelect.addEventListener('change', updatePreview);
+    quantityInput.addEventListener('input', updatePreview);
+    
+    saleForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = {
+        product: productSelect.value,
+        quantity: quantityInput.value
+      };
+      
+      try {
+        const response = await fetch('/sales/record', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          alert('Sale recorded successfully!');
+          window.location.href = '/sales';
+        } else {
+          alert(data.message || 'Error recording sale');
+        }
+      } catch (error) {
+        alert('Error recording sale');
+      }
+    });
+  </script>
+  
+  <style>
+    .sale-preview {
+      background-color: #f8f9fa;
+      padding: 1rem;
+      border-radius: 8px;
+      margin: 1.5rem 0;
+    }
+    
+    .sale-preview h3 {
+      margin-bottom: 1rem;
+    }
+    
+    .sale-preview p {
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<% if (typeof user !== 'undefined' && user) { %>
+<aside class="sidebar">
+  <nav class="sidebar-nav">
+    <a href="/dashboard" class="nav-item">
+      <i class="fas fa-home"></i> Dashboard
+    </a>
+    
+    <% if (user.role === 'admin' || user.role === 'manager') { %>
+    <a href="/participants" class="nav-item">
+      <i class="fas fa-users"></i> Participants
+    </a>
+    <% } %>
+    
+    <a href="/attendance" class="nav-item">
+      <i class="fas fa-calendar-check"></i> Attendance
+    </a>
+    
+    <a href="/products" class="nav-item">
+      <i class="fas fa-box"></i> Products
+    </a>
+    
+    <a href="/sales" class="nav-item">
+      <i class="fas fa-dollar-sign"></i> Sales
+    </a>
+    
+    <a href="/genealogy" class="nav-item">
+      <i class="fas fa-sitemap"></i> Genealogy
+    </a>
+    
+    <a href="/analytics" class="nav-item">
+      <i class="fas fa-chart-bar"></i> Analytics
+    </a>
+    
+    <a href="/announcements" class="nav-item">
+      <i class="fas fa-bullhorn"></i> Announcements
+    </a>
+    
+    <a href="/feed" class="nav-item">
+      <i class="fas fa-rss"></i> Feed
+    </a>
+    
+    <a href="/messenger" class="nav-item">
+      <i class="fas fa-comments"></i> Messenger
+    </a>
+  </nav>
+</aside>
+<% } %>
